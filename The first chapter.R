@@ -29,3 +29,7 @@ ggplot(penguins,aes(x = flipper_length_mm, y = body_mass_g)
 penguins |> 
   ggplot(aes(x=body_mass_g))+
   geom_histogram(na.rm=T, binwidth = 200)
+
+penguins |> 
+  ggplot(aes(x=body_mass_g))+
+  geom_density(na.rm=T, binwidth = 200)
