@@ -31,5 +31,5 @@ penguins |>
   geom_histogram(na.rm=T, binwidth = 200)
 
 penguins |> 
-  ggplot(aes(x=body_mass_g))+
-  geom_density(na.rm=T, binwidth = 200)
+  ggplot(aes(y=species))+
+  geom_bar(na.rm=T)
