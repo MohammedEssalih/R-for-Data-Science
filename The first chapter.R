@@ -33,3 +33,9 @@ penguins |>
 penguins |> 
   ggplot(aes(y=species))+
   geom_bar(na.rm=T)
+
+ggplot(penguins, aes(x = species)) +
+  geom_bar(color = "red")
+
+ggplot(penguins, aes(x = species)) +
+  geom_bar(fill = "red")
