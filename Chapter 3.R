@@ -112,3 +112,135 @@ flights %>%
 flights |> 
   select(tailnum) |> 
   arrange(tailnum)
+
+# The pipe
+flights |> 
+  filter(dest == "IAH") |> 
+  mutate(speed = distance / air_time * 60) |> 
+  select(year:day, dep_time, carrier, flight, speed) |> 
+  arrange(desc(speed))
+
+#3.5 Groups
+Thi_is_my_token="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"
+
+flights |> 
+  group_by(dep_delay)
+
+flights |> 
+  group_by(month) |> 
+  summarize(
+    max_delay = max(dep_delay, na.rm = T),
+    repetition=n()
+  )
+# The slice_ functions
+flights|>
+  group_by(day)|>
+  slice_min(month,n=1)
+
+flights |> 
+  group_by(dest) |> 
+  slice_max(arr_delay, n = 1, with_ties = FALSE) |>
+  relocate(dest)
+
+flights |>  
+  group_by(year, month, day)|>
+  summarise(n=n(),.groups = "drop_last")
+  
+
+flights |>  
+  group_by(year, month, day)|>
+  summarise(n=n())
+
+#3.5.5 Ungrouping
+
+flights |> 
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE), 
+    n = n(),
+    .by = month
+  )
+# Exercises 
+# Which carrier has the worst average delays?
+flights |>
+  group_by(carrier)|>
+  summarise(avrg=mean(dep_delay,na.rm = T))|>
+  arrange(avrg)
+
+flights |>
+  group_by(carrier)|>
+  summarise(avrg=mean(dep_delay,na.rm = T))|>
+  arrange(avrg)
+  
+flights |> 
+  group_by(carrier, dest) |> 
+  summarize(n())
+# Find the flights that are most delayed upon departure from each destination.
+flights$flight
+flights |> 
+  group_by(dest, flight) |> 
+  summarize(delay=max(dep_delay, na.rm = T))
+  
+# How do delays vary over the course of the day. Illustrate your answer with a plot
+data=flights |> 
+  group_by(hour) |> 
+  summarize(dep_del=sum(dep_delay, na.rm = T),arr_del=sum(arr_delay, na.rm = T))
+data|>
+  ggplot(aes(x=hour))+
+  geom_line(aes(y=dep_del, color="red"))+
+  geom_line(aes(y=arr_del,color="blue"))
+  
+# What happens if you supply a negative n to slice_min() and friends?
+flights|>
+slice_min(flight,n=-1)
+# Explain what count() does in terms of the dplyr verbs you just learned. What does the sort argument to count() do?
+flights|>
+  count(carrier,sort = T)
+flights|>
+  group_by(carrier)|>
+  summarise(n(),sort=T)
+# Suppose we have the following tiny data frame:
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+# Write down what you think the output will look like, then check if you were correct, and describe what group_by() does.
+df|>
+  group_by(y)
+
+# Write down what you think the output will look like, then check if you were correct, and describe what arrange() does. Also comment on how it’s different from the group_by() in part (a)?
+df |>
+  arrange(y)
+# Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does.
+df |>
+  group_by(y) |>
+  summarize(mean_x = mean(x))
+# Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does. Then, comment on what the message says
+df |>
+  group_by(y,z)|>
+  summarise(mean_x=mean(x))
+
+# Write down what you think the output will look like, then check if you were correct, and describe what the pipeline does. How is the output different from the one in part (d).
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x), .groups = "drop")
+# Write down what you think the outputs will look like, then check if you were correct, and describe what each pipeline does. How are the outputs of the two pipelines different?
+
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+
+df |>
+  group_by(y, z) |>
+  mutate(mean_x = mean(x))
+
+
+install.packages("Lahman")
+library(Lahman)
+batters <- Lahman::Batting |> 
+  group_by(playerID) |> 
+  summarize(
+    performance = sum(H, na.rm = TRUE) / sum(AB, na.rm = TRUE),
+    n = sum(AB, na.rm = TRUE)
+  )
+batters
