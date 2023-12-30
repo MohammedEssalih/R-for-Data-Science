@@ -7,7 +7,7 @@ short_flights <- flights |> filter(air_time < 60)
 # Avoid:
 SHORTFLIGHTS <- flights |> filter(air_time < 60)
 
-
+PTA='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'
 # Strive for 
 flights |>  
   filter(!is.na(arr_delay), !is.na(tailnum)) |> 
