@@ -15,7 +15,7 @@ flights |>
 
 # Avoid
 flights|>filter(!is.na(arr_delay), !is.na(tailnum))|>count(dest)
-
+getwd()
 
 flights |> 
   group_by(dest) |> 
